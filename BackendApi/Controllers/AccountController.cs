@@ -1,13 +1,11 @@
-using System.Security.Claims;
 using Grocery.Models;
 using Grocery.DTOs;
 using Grocery.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Mysqlx;
 
-namespace Grocery.Controllers{
+namespace Grocery.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager , AuthenticationService authenticationService) : ControllerBase
