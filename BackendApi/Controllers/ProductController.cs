@@ -44,6 +44,5 @@ namespace Grocery.Controllers{
 			await _productService.Delete(id);
 			return Ok(new { message = "Deleted successfully" });
 		}
-
 	}
 }

@@ -3,28 +3,72 @@ using Grocery.DTOs;
 using Grocery.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Configuration;
 
 namespace Grocery.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager , AuthenticationService authenticationService) : ControllerBase
+    public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager , Services.AuthenticationService authenticationService, IConfiguration configuration) : ControllerBase
     {
         private readonly SignInManager<User> _signInManager = signInManager;
-        private readonly AuthenticationService _authenticationService = authenticationService;
+        private readonly Services.AuthenticationService _authenticationService = authenticationService;
         private readonly UserManager<User> _userManager = userManager;
+        private readonly IConfiguration _configuration = configuration;
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO login)
         {
             var user = await _authenticationService.AuthenticateUserAsync(login.Username, login.Password);
             if (user != null)
             {
-                if (user.UserName == null) {throw new ArgumentNullException(nameof(user.UserName), "User name cannot be null.");}
+                if (user.UserName == null)
+                {
+                    throw new ArgumentNullException(nameof(user.UserName), "User name cannot be null.");
+                }
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, login.Remember, lockoutOnFailure: false);
-                
+
                 if (result.Succeeded)
                 {
-                    return Ok("Login success");
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var username = await _userManager.GetUserNameAsync(user);
+
+                    //Create and set authentication cookie
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id)
+                    };
+
+                    foreach (var role in roles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+                    var keyString = _configuration["Jwt:Key"];
+                    if (string.IsNullOrEmpty(keyString))
+                    {
+                        throw new InvalidOperationException("JWT Key is missing in configuration.");
+                    }
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
+                    
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+                    var token = new JwtSecurityToken(
+                        issuer: _configuration["Jwt:Issuer"],
+                        audience: _configuration["Jwt:Audience"],
+                        claims: claims,
+                        expires: DateTime.Now.AddMinutes(30),
+                        signingCredentials: creds);
+
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+                    return Ok(new { Token = tokenString });
                 }
             }
 
@@ -51,7 +95,7 @@ namespace Grocery.Controllers
                         var roleResult = await _userManager.AddToRoleAsync(user,"User");
                         if(roleResult.Succeeded){
                             // Đăng nhập người dùng sau khi đăng ký thành công
-                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            //await _signInManager.SignInAsync(user, isPersistent: false);
 
                             // Đăng ký thành công
                             return Ok("Register success");

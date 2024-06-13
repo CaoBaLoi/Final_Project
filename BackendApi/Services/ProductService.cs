@@ -5,7 +5,7 @@ using Grocery.Repositories;
 namespace Grocery.Services{
     public interface IProductService
 	{
-		Task<IEnumerable<Product>> GetAll();
+		Task<IEnumerable<GetProductDTO>> GetAll();
 		Task<Product?> GetById(int id);
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
@@ -24,7 +24,7 @@ namespace Grocery.Services{
 			await _productRepository.Delete(id);
 		}
 
-		public async Task<IEnumerable<Product>> GetAll()
+		public async Task<IEnumerable<GetProductDTO>> GetAll()
 		{
 			return await _productRepository.GetAll();
 		}
@@ -34,7 +34,7 @@ namespace Grocery.Services{
 			return await _productRepository.GetById(id);
 		}
 
-		public async Task Update(ProductDTO productDTO)
+        public async Task Update(ProductDTO productDTO)
 		{
 			await _productRepository.Update(productDTO);
 		}

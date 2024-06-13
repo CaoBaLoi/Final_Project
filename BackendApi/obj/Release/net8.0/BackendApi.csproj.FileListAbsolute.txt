@@ -141,3 +141,9 @@ D:\Grocery\BackendApi\obj\Release\net8.0\refint\BackendApi.dll
 D:\Grocery\BackendApi\obj\Release\net8.0\BackendApi.pdb
 D:\Grocery\BackendApi\obj\Release\net8.0\BackendApi.genruntimeconfig.cache
 D:\Grocery\BackendApi\obj\Release\net8.0\ref\BackendApi.dll
+D:\Grocery\BackendApi\obj\Release\net8.0\BackendApi.sourcelink.json
+D:\Grocery\BackendApi\bin\Release\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\System.IdentityModel.Tokens.Jwt.dll

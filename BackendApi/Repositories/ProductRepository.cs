@@ -7,28 +7,47 @@ using Grocery.Services;
 namespace Grocery.Repositories{
     public interface IProductRepository
 	{
-		Task<IEnumerable<Product>> GetAll();
+		Task<IEnumerable<GetProductDTO>> GetAll();
 		Task<Product?> GetById(int id);
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
 		Task Delete(int id);
 	}
-    public class ProductRepository(DataContext context, TagService tagService, CategoryService categoryService, ProductTagService productTagService, ProductImageService productImageService, GoogleDriveService googleDriveService) : IProductRepository
+    public class ProductRepository(DataContext context, TagService tagService, CategoryService categoryService, ProductTagService productTagService, ProductImageService productImageService, CloudinaryService cloudinaryService) : IProductRepository
 	{
 		private readonly DataContext _context = context;
         private readonly TagService _tagService = tagService;
 		private readonly CategoryService _categoryService = categoryService;
 		private readonly ProductTagService _productTagService = productTagService;
 		private readonly ProductImageService _productImageService = productImageService;
-		private readonly GoogleDriveService _googleDriveService = googleDriveService;
-		public async Task<IEnumerable<Product>> GetAll()
+		private readonly CloudinaryService _cloudinaryService = cloudinaryService;
+		public async Task<IEnumerable<GetProductDTO>> GetAll()
 		{
 			using var connection = _context.CreateConnection();
 			var sql = @"
-				SELECT * FROM Products
+				SELECT 
+					p.*, 
+					pi.image_url, 
+					c.category_name,
+					GROUP_CONCAT(t.tag_name SEPARATOR ', ') AS tag_names
+				FROM 
+					Products p
+				LEFT JOIN 
+					ProductImage pi ON p.product_id = pi.product_id
+				LEFT JOIN 
+					Categories c ON p.category_id = c.category_id
+				LEFT JOIN 
+					ProductTag pt ON p.product_id = pt.product_id
+				LEFT JOIN 
+					Tags t ON pt.tag_id = t.tag_id
+				GROUP BY 
+					p.product_id, pi.image_url, c.category_name;
+
 			";
-			return await connection.QueryAsync<Product>(sql);
+			return await connection.QueryAsync<GetProductDTO>(sql);
 		}
+
+
 		public async Task<Product?> GetById(int id)
 		{
 			using var connection = _context.CreateConnection();
@@ -75,7 +94,8 @@ namespace Grocery.Repositories{
 			foreach (var imageFile in productDTO.image_file)
 			{
 				string? imageUrl;
-				imageUrl= _googleDriveService.UploadImageToGoogleDrive(imageFile);
+				//imageUrl= _googleDriveService.UploadImageToGoogleDrive(imageFile);
+				imageUrl = _cloudinaryService.UploadImage(imageFile);
 				if(imageUrl != null){
 					image_urls.Add(imageUrl);
 				}
@@ -143,8 +163,16 @@ namespace Grocery.Repositories{
 					if (old_url != null)
 					{
 						// Sử dụng Replace để thay thế phần cố định "https://drive.google.com/uc?id=" bằng chuỗi trống ""
-						string fileId = old_url.Replace("https://drive.google.com/uc?id=", "");
-						_googleDriveService.DeleteImageFromGoogleDrive(fileId);
+						string fileId = old_url.Replace("http://res.cloudinary.com/dkhf0nsxl/image/upload/v1718208527/", "");
+						// Nếu fileId chứa phần mở rộng ".png", cắt bớt phần mở rộng này đi
+						int extensionIndex = fileId.LastIndexOf(".");
+						if (extensionIndex != -1)
+						{
+							fileId = fileId.Substring(0, extensionIndex);
+						}
+
+						// Gọi phương thức DeleteImage từ _cloudinaryService với fileId đã được cắt
+						_cloudinaryService.DeleteImage(fileId);
 					}
 				}
 			}
@@ -159,7 +187,7 @@ namespace Grocery.Repositories{
 			List<string> image_urls = new List<string>();
 			foreach (var imageFile in productDTO.image_file)
 			{
-				string? imageUrl = _googleDriveService.UploadImageToGoogleDrive(imageFile);
+				string? imageUrl = _cloudinaryService.UploadImage(imageFile);
 				if (imageUrl != null)
 				{
 					image_urls.Add(imageUrl);
@@ -188,8 +216,16 @@ namespace Grocery.Repositories{
 					if (old_url != null)
 					{
 						// Sử dụng Replace để thay thế phần cố định "https://drive.google.com/uc?id=" bằng chuỗi trống ""
-						string fileId = old_url.Replace("https://drive.google.com/uc?id=", "");
-						_googleDriveService.DeleteImageFromGoogleDrive(fileId);
+						string fileId = old_url.Replace("http://res.cloudinary.com/dkhf0nsxl/image/upload/v1718208527/", "");
+						// Nếu fileId chứa phần mở rộng ".png", cắt bớt phần mở rộng này đi
+						int extensionIndex = fileId.LastIndexOf(".");
+						if (extensionIndex != -1)
+						{
+							fileId = fileId.Substring(0, extensionIndex);
+						}
+
+						// Gọi phương thức DeleteImage từ _cloudinaryService với fileId đã được cắt
+						_cloudinaryService.DeleteImage(fileId);
 					}
 				}
 				// Đợi tất cả các tác vụ xóa hình ảnh từ Google Drive hoàn thành

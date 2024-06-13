@@ -25,6 +25,10 @@ D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.EntityFrameworkCore.R
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.Extensions.Identity.Core.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.Extensions.Identity.Stores.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.Extensions.Options.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.IdentityModel.Abstractions.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.IdentityModel.Logging.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.IdentityModel.Tokens.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.OpenApi.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\Microsoft.Win32.SystemEvents.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\MySql.Data.dll
@@ -37,6 +41,7 @@ D:\Grocery\BackendApi\bin\Release\net8.0\publish\Swashbuckle.AspNetCore.SwaggerU
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.CodeDom.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.Configuration.ConfigurationManager.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.Drawing.Common.dll
+D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.IdentityModel.Tokens.Jwt.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.Management.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.Security.Cryptography.ProtectedData.dll
 D:\Grocery\BackendApi\bin\Release\net8.0\publish\System.Security.Permissions.dll
