@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ypmJ5wE0XG/Nk0u7el0+YZ1fPd5upaMSKCmDxcFTD2unP+cVb2jqaXm3AFw+gzljXlv5dsdsumRVXxSu7hRxVw==",
+  "dgSpecHash": "z6IFPXWi1pMbQAfgutstCOBVwHgLV++RB/xi1IWNzBMOEkui//QBvcps6XytYhhwRgj3julwSKYLm7o8LgWv3g==",
   "success": true,
-  "projectFilePath": "D:\\Grocery\\BackendApi\\BackendApi.csproj",
+  "projectFilePath": "D:\\Househole_shop\\BackendApi\\BackendApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\caoba\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\caoba\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",

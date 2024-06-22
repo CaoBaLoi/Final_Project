@@ -1,14 +1,14 @@
 using Dapper;
-using Grocery.DTOs;
-using Grocery.Helpers;
-using Grocery.Models;
-using Grocery.Services;
+using Househole_shop.DTOs;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
+using Househole_shop.Services;
 
-namespace Grocery.Repositories{
+namespace Househole_shop.Repositories{
     public interface IProductRepository
 	{
 		Task<IEnumerable<GetProductDTO>> GetAll();
-		Task<Product?> GetById(int id);
+		Task<GetProductDTO?> GetById(int id);
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
 		Task Delete(int id);
@@ -48,14 +48,39 @@ namespace Grocery.Repositories{
 		}
 
 
-		public async Task<Product?> GetById(int id)
+		public async Task<GetProductDTO?> GetById(int id)
 		{
 			using var connection = _context.CreateConnection();
 			var sql = @"
-				SELECT * FROM Products
-				WHERE product_id = @id
+				SELECT 
+					p.*, 
+					pi.image_url, 
+					c.category_name,
+					GROUP_CONCAT(t.tag_name SEPARATOR ', ') AS tag_names
+				FROM 
+					Products p
+				LEFT JOIN 
+					ProductImage pi ON p.product_id = pi.product_id
+				LEFT JOIN 
+					Categories c ON p.category_id = c.category_id
+				LEFT JOIN 
+					ProductTag pt ON p.product_id = pt.product_id
+				LEFT JOIN 
+					Tags t ON pt.tag_id = t.tag_id
+				WHERE p.product_id = @id
+				GROUP BY 
+					p.product_id, pi.image_url, c.category_name;
+				
 			";
-			return await connection.QuerySingleOrDefaultAsync<Product>(sql, new { id });
+			var result =  await connection.QuerySingleOrDefaultAsync<GetProductDTO>(sql, new { id });
+			if (result == null)
+			{
+				throw new Exception($"Không tìm thấy sản phẩm với id = {id}");
+			}
+
+			// Xử lý các thao tác khác nếu cần
+
+			return result;
 		}
 		public async Task Create(ProductDTO productDTO)
 		{

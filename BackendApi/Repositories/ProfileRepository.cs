@@ -1,11 +1,11 @@
 using Dapper;
-using Grocery.DTOs;
-using Grocery.Helpers;
-using Grocery.Models;
+using Househole_shop.DTOs;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
-namespace Grocery.Repositories{
+namespace Househole_shop.Repositories{
     public interface IProfileRepository
 	{
 		Task<Profile?> GetProfileByUserIdAsync(string userId);

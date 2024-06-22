@@ -1,7 +1,7 @@
 using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace Grocery.Helpers{
+namespace Househole_shop.Helpers{
     public class DataContext{
         public IDbConnection CreateConnection()
 		{

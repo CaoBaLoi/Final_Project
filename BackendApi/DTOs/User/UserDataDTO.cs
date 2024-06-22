@@ -1,4 +1,4 @@
-namespace Grocery.DTOs{
+namespace Househole_shop.DTOs{
     public class UserDataDTO
     {
         public  string? Id { get; set; }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Grocery.DTOs{
+namespace Househole_shop.DTOs{
     public class ForgotPassDTO{
         [Required]
         [EmailAddress]

@@ -1,10 +1,10 @@
 using Dapper;
-using Grocery.DTOs;
-using Grocery.Helpers;
-using Grocery.Models;
-using Grocery.Services;
+using Househole_shop.DTOs;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
+using Househole_shop.Services;
 
-namespace Grocery.Repositories{
+namespace Househole_shop.Repositories{
     public interface ISaleRepository
 	{
 		Task<IEnumerable<Sale>> GetAll();
@@ -44,7 +44,6 @@ namespace Grocery.Repositories{
 				saleDTO.sale_end_time
 			});
 			await Task.WhenAll(task);
-			// Kiểm tra và thêm các sản phẩm vào bảng chi tiết bán hàng (SaleDetails) nếu có
 			if (saleDTO.sale_items != null )
 			{
 				foreach (var saleItem in saleDTO.sale_items)

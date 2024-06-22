@@ -1,8 +1,8 @@
 using Dapper;
-using Grocery.Helpers;
-using Grocery.Models;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
 using Microsoft.AspNetCore.Identity;
-namespace Grocery.Services{
+namespace Househole_shop.Services{
 public class AuthenticationService(DataContext context, UserManager<User> userManager, MailService mailService)
 {
     private readonly DataContext _context = context;

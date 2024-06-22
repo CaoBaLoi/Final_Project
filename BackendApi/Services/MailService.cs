@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity.UI.Services;
-namespace Grocery.Services{
+namespace Househole_shop.Services{
 public class MailService():IEmailSender{
     public class Config
     {
@@ -19,7 +19,7 @@ public class MailService():IEmailSender{
     public async Task SendEmailAsync(string email, string subject, string message)
     {
         // Đọc tệp JSON
-            string jsonString = File.ReadAllText("D:\\Grocery\\mail-setting.json");
+            string jsonString = File.ReadAllText("D:\\Househole_shop\\mail-setting.json");
 
             // Định nghĩa lớp EmailSettings để ánh xạ với JSON
             var config = JsonSerializer.Deserialize<Config>(jsonString);

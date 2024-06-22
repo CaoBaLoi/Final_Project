@@ -1,24 +1,22 @@
-using Grocery.Models;
-using Grocery.DTOs;
-using Grocery.Services;
+using Househole_shop.Models;
+using Househole_shop.DTOs;
+using Househole_shop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Configuration;
 
-namespace Grocery.Controllers
+namespace Househole_shop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager , Services.AuthenticationService authenticationService, IConfiguration configuration) : ControllerBase
+    public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager , AuthenticationService authenticationService, IConfiguration configuration) : ControllerBase
     {
         private readonly SignInManager<User> _signInManager = signInManager;
-        private readonly Services.AuthenticationService _authenticationService = authenticationService;
+        private readonly AuthenticationService _authenticationService = authenticationService;
         private readonly UserManager<User> _userManager = userManager;
         private readonly IConfiguration _configuration = configuration;
         [HttpPost("login")]

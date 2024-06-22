@@ -7920,11 +7920,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Grocery\\BackendApi\\BackendApi.csproj",
+      "projectUniqueName": "D:\\Househole_shop\\BackendApi\\BackendApi.csproj",
       "projectName": "BackendApi",
-      "projectPath": "D:\\Grocery\\BackendApi\\BackendApi.csproj",
+      "projectPath": "D:\\Househole_shop\\BackendApi\\BackendApi.csproj",
       "packagesPath": "C:\\Users\\caoba\\.nuget\\packages\\",
-      "outputPath": "D:\\Grocery\\BackendApi\\obj\\",
+      "outputPath": "D:\\Househole_shop\\BackendApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\caoba\\AppData\\Roaming\\NuGet\\NuGet.Config",

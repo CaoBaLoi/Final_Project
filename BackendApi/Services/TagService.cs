@@ -1,7 +1,7 @@
-using Grocery.Models;
-using Grocery.Repositories;
+using Househole_shop.Models;
+using Househole_shop.Repositories;
 
-namespace Grocery.Services{
+namespace Househole_shop.Services{
     public interface ITagService
 	{
 		Task<IEnumerable<Tag>> GetAll();
@@ -11,7 +11,6 @@ namespace Grocery.Services{
 		Task Delete(int id);
 		Task<Tag?> GetByName(string tagName);
 		Task<int> GetOrCreateTagId(string tagName);
-		// Task<Tag?> TagExits(string tagName);
 	}
 	public class TagService(ITagRepository tagRepository) : ITagService
 	{

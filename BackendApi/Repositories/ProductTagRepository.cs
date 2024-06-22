@@ -1,8 +1,8 @@
 using Dapper;
-using Grocery.Helpers;
-using Grocery.Models;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
 
-namespace Grocery.Repositories{
+namespace Househole_shop.Repositories{
     public interface IProductTagRepository
 	{
 		Task<IEnumerable<ProductTag>> GetAll();

@@ -1,8 +1,8 @@
-using Grocery.DTOs;
-using Grocery.Models;
-using Grocery.Repositories;
+using Househole_shop.DTOs;
+using Househole_shop.Models;
+using Househole_shop.Repositories;
 
-namespace Grocery.Services{
+namespace Househole_shop.Services{
     public interface IProfileService{
         Task<Profile?> GetProfileByUserIdAsync (string userId);
         Task Create (ProfileDTO profileDTO);

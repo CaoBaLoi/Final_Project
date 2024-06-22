@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Grocery.Models{
+namespace Househole_shop.Models{
     public class Register{
         [Required]
         public required string Username {get;set;}

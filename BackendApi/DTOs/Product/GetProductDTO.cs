@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Grocery.DTOs{
+namespace Househole_shop.DTOs{
     public class GetProductDTO{
         [Required]
         public int product_id {get;set;}

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 
-namespace Grocery.Services
+namespace Househole_shop.Services
 {
     public class CloudinaryService
     {
@@ -15,7 +15,7 @@ namespace Grocery.Services
 
         public CloudinaryService()
         {
-            var configText = File.ReadAllText("D:\\Grocery\\cloudinary_config.json");
+            var configText = File.ReadAllText("D:\\Househole_shop\\cloudinary_config.json");
             var config = JsonConvert.DeserializeObject<CloudinaryConfig>(configText);
             if (config != null)
             {

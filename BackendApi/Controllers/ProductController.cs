@@ -1,9 +1,9 @@
-using Grocery.DTOs;
-using Grocery.Models;
-using Grocery.Services;
+using Househole_shop.DTOs;
+using Househole_shop.Models;
+using Househole_shop.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Grocery.Controllers{
+namespace Househole_shop.Controllers{
     [ApiController]
 	[Route("api/[controller]")]
 	public class ProductController(IProductService productService) : ControllerBase

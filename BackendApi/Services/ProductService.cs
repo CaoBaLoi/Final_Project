@@ -1,12 +1,12 @@
-using Grocery.DTOs;
-using Grocery.Models;
-using Grocery.Repositories;
+using Househole_shop.DTOs;
+using Househole_shop.Models;
+using Househole_shop.Repositories;
 
-namespace Grocery.Services{
+namespace Househole_shop.Services{
     public interface IProductService
 	{
 		Task<IEnumerable<GetProductDTO>> GetAll();
-		Task<Product?> GetById(int id);
+		Task<GetProductDTO?> GetById(int id);
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
 		Task Delete(int id);
@@ -29,7 +29,7 @@ namespace Grocery.Services{
 			return await _productRepository.GetAll();
 		}
 
-		public async Task<Product?> GetById(int id)
+		public async Task<GetProductDTO?> GetById(int id)
 		{
 			return await _productRepository.GetById(id);
 		}

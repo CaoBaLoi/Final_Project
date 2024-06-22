@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Grocery.Models{
+namespace Househole_shop.Models{
     public class SaleDetail{
         [Required]
         public int sale_deatil_id {get;set;}

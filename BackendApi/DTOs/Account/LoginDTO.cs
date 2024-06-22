@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Grocery.DTOs{
+namespace Househole_shop.DTOs{
     public class LoginDTO{
         [Required]
         public required string Username {get;set;}

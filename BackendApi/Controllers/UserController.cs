@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
-using Grocery.DTOs;
+using Househole_shop.DTOs;
 using System.Security.Claims;
 
-namespace Grocery.Controllers
+namespace Househole_shop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

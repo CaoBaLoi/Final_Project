@@ -1,21 +1,16 @@
 using System.Text;
-using BackendApi.Migrations;
-using Grocery.Data;
-using Grocery.Helpers;
-using Grocery.Models;
-using Grocery.Repositories;
-using Grocery.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Househole_shop.Data;
+using Househole_shop.Helpers;
+using Househole_shop.Models;
+using Househole_shop.Repositories;
+using Househole_shop.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,8 +19,6 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
-// builder.Services.AddIdentityApiEndpoints<User>()
-// 	.AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentity<User,IdentityRole>(options =>{
     options.Password.RequireDigit = true;
     options.Password.RequireNonAlphanumeric = true;
@@ -61,26 +54,6 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
         };
     });
-// Configure authentication
-// builder.Services.AddAuthentication()
-//     .AddCookie( options =>
-//     {
-//         options.Cookie.HttpOnly = true;
-//         options.LoginPath = "/api/account/login";
-//         options.LogoutPath = "/api/account/logout";
-//         options.Cookie.Name = "jwt";
-//         // options.AccessDeniedPath = "/Account/AccessDenied";
-//         options.SlidingExpiration = true;
-//     });
-// builder.Services.ConfigureApplicationCookie(options =>
-// {
-//     options.Cookie.HttpOnly = true;
-//     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-//     options.LoginPath = "/api/account/login"; // Đường dẫn tới API đăng nhập
-//     options.LogoutPath = "/api/account/logout";
-//     // options.AccessDeniedPath = "/api/account/accessdenied"; // Đường dẫn tới API truy cập bị từ chối
-//     options.SlidingExpiration = true;
-// });
 builder.Services.AddSingleton<DataContext>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -98,6 +71,8 @@ builder.Services.AddScoped<ISaleDetailRepository, SaleDetailRepository>();
 builder.Services.AddScoped<ISaleDetailService, SaleDetailService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<TagService>();
 builder.Services.AddScoped<CategoryService>();
@@ -119,7 +94,6 @@ builder.Services.AddCors(options =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
