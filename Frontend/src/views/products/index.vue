@@ -1,16 +1,16 @@
 <template>
   <el-button><router-link to="/product/create" style="text-decoration: none;">Thêm mới</router-link></el-button>
-    <el-table :data="filterTableData" style="width: 100%">
-      <el-table-column label="ID" prop="product_id" />
-      <el-table-column label="Tên sản phẩm" prop="product_name" />
-      <el-table-column label="Hình ảnh">
+    <el-table :data="filterTableData" border style="width: 80%;">
+      <el-table-column label="ID" prop="product_id" width="50"/>
+      <el-table-column label="Tên sản phẩm" prop="product_name"/>
+      <el-table-column label="Hình ảnh" width="125">
         <template #default="scope">
           <img :src="scope.row.image_url" alt="" style="max-width: 100px; max-height: 100px;">
         </template>
       </el-table-column>
-      <el-table-column label="Số lượng" prop="product_quantity" />
-      <el-table-column label="Giá bán" prop="product_price" />
-      <el-table-column align="right">
+      <el-table-column label="Số lượng" prop="product_quantity" width="80"/>
+      <el-table-column label="Giá bán" prop="product_price" width="150"/>
+      <el-table-column align="right" width="150">
         <template #header>
           <el-input v-model="search" size="small" placeholder="Nhập từ khóa" />
         </template>

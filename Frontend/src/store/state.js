@@ -4,5 +4,7 @@ export default {
     loggedIn: false,
     username: '',
     products: [],
+    product: null,
     tags: [],
+    cart:[]
 }

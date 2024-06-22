@@ -1,6 +1,6 @@
 <template>
   <el-button><router-link to="/category/create" style="text-decoration: none;">Thêm mới</router-link></el-button>
-    <el-table :data="filterTableData" style="width: 100%">
+    <el-table :data="filterTableData" style="width: 80%">
       <el-table-column label="ID" prop="category_id" />
       <el-table-column label="Tên danh mục" prop="category_name" />
       <el-table-column align="right">

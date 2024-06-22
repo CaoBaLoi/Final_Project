@@ -34,6 +34,7 @@ export default {
           commit('SET_LOGIN', response2.data.username);
           localStorage.setItem('loggedIn', true);
           localStorage.setItem('username', response2.data.username);
+          localStorage.setItem('role', response2.data.roles)
   
           // Kiểm tra và điều hướng người dùng dựa trên vai trò
           const roles = response2.data.roles; // Danh sách vai trò
@@ -59,6 +60,10 @@ export default {
     try{
       await axios.post('http://localhost:5183/api/account/logout');
       commit('LOGOUT');
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+
       router.push('/login');
     }catch (error){
       console.error('Đã xảy ra lỗi khi đăng xuất', error);
@@ -82,15 +87,6 @@ export default {
       console.error("Lỗi thêm danh mục",error);
     }
   },
-  async arrayBufferToBase64(arrayBuffer) {
-    let binary = '';
-    const bytes = new Uint8Array(arrayBuffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  },
   async fetchProducts({ commit }) {
     try {
       const response = await axios.get('http://localhost:5183/api/product');
@@ -99,14 +95,6 @@ export default {
       console.error('Error fetching products:', error);
     }
   },
-  // async getCategoryname({commit}){
-  //   try{
-  //     const response = await axios.get('http://localhost:5183/api/category');
-  //     commit('SET_CATEGORIES', response.data)
-  //   }catch (error) {
-  //     console.error('Error get category name:', error);
-  //   }
-  // },
   async getTagname({commit}){
     try{
       const response = await axios.get('http://localhost:5183/api/tag');
@@ -114,5 +102,34 @@ export default {
     }catch (error) {
       console.error('Error get tag name:', error);
     }
+  },
+  async createProduct({commit}, {product_id, product_name, category_name, tag_name, product_price, product_quantity, product_description, image_file}){
+    try{
+      const response = await axios.post('http://localhost:5183/api/product',{product_id, product_name, category_name, tag_name, product_price, product_quantity, product_description, image_file})
+      commit('ADD_PRODUCTS', response.data)
+      router.push('/product')
+    }catch(error){
+      console.error('Lỗi thêm sản phẩm', error)
+    }
+  },
+  async getProduct({commit},id){
+    try{
+      const response = await axios.get(`http://localhost:5183/api/Product/${id}`)
+      commit('SET_PRODUCT',response.data)
+    }catch(error){
+      console.error('Lỗi lấy sản phẩm', error)
+    }
+  },
+  async fetchCart({ commit }) {
+    const response = await axios.get('/api/cart');
+    commit('SET_CART', response.data);
+  },
+  async addToCart({ commit }, item) {
+    await axios.post('/api/cart', item);
+    commit('ADD_TO_CART', item);
+  },
+  async removeFromCart({ commit }, product_id) {
+    await axios.delete(`/api/cart/${product_id}`);
+    commit('REMOVE_FROM_CART', product_id);
   }
 };

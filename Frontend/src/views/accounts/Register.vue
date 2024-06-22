@@ -10,7 +10,7 @@
           <el-input v-model="form.Email" placeholder="Nhập email"></el-input>
         </el-form-item>
         <el-form-item label="Mật khẩu" prop="Password">
-          <el-input type="password" v-model="form.Password" placeholder="Nhập mật khẩu"></el-input>
+          <el-input type="password" v-model="form.Password" placeholder="Nhập mật khẩu" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <div class="button-container">

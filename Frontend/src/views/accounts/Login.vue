@@ -7,7 +7,7 @@
           <el-input v-model="form.UserName" placeholder="Nhập tên đăng nhập"></el-input>
         </el-form-item>
         <el-form-item label="Mật khẩu" prop="Password">
-          <el-input type="password" v-model="form.Password" placeholder="Nhập mật khẩu"></el-input>
+          <el-input type="password" v-model="form.Password" placeholder="Nhập mật khẩu" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="form.Remember" prop="Remember">Nhớ mật khẩu</el-checkbox>
@@ -27,10 +27,20 @@
         </div>
       </el-form>
     </el-card>
+    <el-dialog v-model="visible"  width="500">
+    <template #header="{ titleId, titleClass }">
+      <div class="my-header">
+        <h4 :id="titleId" :class="titleClass">Đã có lỗi xảy ra</h4>
+      </div>
+    </template>
+    {{ errorMessage }}
+  </el-dialog>
   </div>
 </template>
 
 <script>
+import { ElMessage } from 'element-plus';
+
 export default {
   data() {
     return {
@@ -40,13 +50,15 @@ export default {
         Remember: false
       },
       rules: {
-        name: [
-          { required: true, message: 'Vui lòng nhập họ và tên', trigger: 'blur' }
+        UserName: [
+          { required: true, message: 'Vui lòng nhập tên tài khoản', trigger: 'blur' }
         ],
-        password: [
+        Password: [
           { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' }
         ]
-      }
+      },
+      visible: false,
+      errorMessage: ''
     }
   },
   methods: {
@@ -59,12 +71,16 @@ export default {
         });
       } catch (error) {
         console.error('Đã xảy ra lỗi khi đăng nhập:', error);
-        alert('Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.');
+        this.errorMessage = 'Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.';
+        this.visible = true;
       }
     },
     onGoogleLogin() {
       // Logic đăng nhập với Google
       alert('Đăng nhập với Google');
+    },
+    handleDialogClose() {
+      this.visible = false;
     }
   }
 }
