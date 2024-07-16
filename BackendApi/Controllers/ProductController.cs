@@ -23,7 +23,12 @@ namespace Househole_shop.Controllers{
 			var product = await _productService.GetById(id);
 			return Ok(product);
 		}
-
+		[HttpGet("quantity")]
+		public async Task<IActionResult> GetQuantity(int product_id)
+		{
+			var quantity = await _productService.GetQuantity(product_id);
+			return Ok(quantity);
+		}
 		[HttpPost]
 		public async Task<IActionResult> Create(ProductDTO productDTO)
 		{
@@ -37,7 +42,12 @@ namespace Househole_shop.Controllers{
 			await _productService.Update(productDTO);
 			return Ok(new { message = "Updated successfully" });
 		}
-
+		[HttpPut("quantity")]
+		public async Task<IActionResult> Update(int product_id, int quantity)
+		{
+			await _productService.UpdateQuantity(product_id, quantity);
+			return Ok(new { message = "Updated successfully" });
+		}
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{

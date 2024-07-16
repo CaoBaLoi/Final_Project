@@ -16,12 +16,6 @@ namespace Househole_shop.Controllers{
 			return Ok(productImage);
 		}
 
-		// [HttpGet("{id}")]
-		// public async Task<IActionResult> GetById(int id)
-		// {
-		// 	var productImage = await _productImageService.GetById(id);
-		// 	return Ok(productImage);
-		// }
 
 		[HttpPost]
 		public async Task<IActionResult> Create(ProductImage productImage)
@@ -37,12 +31,12 @@ namespace Househole_shop.Controllers{
 			return Ok(new { message = "Updated successfully" });
 		}
 
-		// [HttpDelete("{id}")]
-		// public async Task<IActionResult> Delete(int id)
-		// {
-		// 	await _productImageService.Delete(id);
-		// 	return Ok(new { message = "Deleted successfully" });
-		// }
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			await _productImageService.Delete(id);
+			return Ok(new { message = "Deleted successfully" });
+		}
 
 	}
 }

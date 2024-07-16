@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using Househole_shop.DTOs;
+using Househole_shop.Models;
 using Househole_shop.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Househole_shop.Controllers{
@@ -9,72 +11,73 @@ namespace Househole_shop.Controllers{
     public class CartController : ControllerBase
     {
         private readonly CartService _cartService;
+        private readonly UserManager<User> _userManager;
 
-        public CartController(CartService cartService)
+        public CartController(CartService cartService, UserManager<User> userManager)
         {
             _cartService = cartService;
+            _userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCartItems()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim != null)
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user == null)
             {
-                if (int.TryParse(userIdClaim.Value, out int user_id))
-                {
-                    // Now you can use userId safely
-                    var items = await _cartService.GetCartItems(user_id);
-                    return Ok(items);
-                }
-                else
-                {
-                    // Handle the case where userIdClaim.Value cannot be parsed to an integer
-                    return BadRequest("Invalid user ID format");
-                }
+                return Unauthorized(); 
             }
-            else
+            try
             {
-                // Handle the case where ClaimTypes.NameIdentifier is not found
-                return Unauthorized(); // Or some other appropriate response
+                var items = await _cartService.GetCartItems(user.Id);
+                return Ok(items);
             }
-
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToCart([FromBody] CartDTO cartDTO)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user == null)
             {
-                return Unauthorized(); // Or handle the unauthorized case appropriately
+                return Unauthorized();
             }
-
-            if (!int.TryParse(userIdClaim.Value, out int userId))
+            try
             {
-                return BadRequest("Invalid user ID format");
+                await _cartService.AddToCart(user.Id, cartDTO.product_id, cartDTO.quantity);
+                return Ok();
             }
-
-            await _cartService.AddToCart(userId, cartDTO.product_id, cartDTO.quantity);
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
+
         [HttpDelete("{product_id}")]
-        public async Task<IActionResult> RemoveFromCart(int product_id)
+        public async Task<IActionResult> RemoveFromCart( int product_id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user == null)
             {
-                return Unauthorized(); // Or handle the unauthorized case appropriately
+                return Unauthorized();
             }
-
-            if (!int.TryParse(userIdClaim.Value, out int userId))
+            try
             {
-                return BadRequest("Invalid user ID format");
+                await _cartService.RemoveFromCart(user.Id, product_id);
+                return Ok();
             }
-
-            await _cartService.RemoveFromCart(userId, product_id);
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

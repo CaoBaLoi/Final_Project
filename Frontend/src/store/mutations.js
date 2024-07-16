@@ -22,6 +22,9 @@ export default {
     SET_TAGS(state, tags){
       state.tags = tags;
     },
+    ADD_PRODUCTS(state, product){
+      state.products.push(product)
+    },
     SET_PRODUCT(state, product){
       state.product = product
     },
@@ -38,6 +41,45 @@ export default {
     },
     REMOVE_FROM_CART(state, product_id) {
       state.cart = state.cart.filter(i => i.product_id !== product_id);
-    }
+    },
+    SET_PROFILE(state, profile){
+      state.profile = profile;
+    },
+    SET_ADDRESS(state, address){
+      state.address = address
+    },
+    ADD_ADDRESS(state, newAddress){
+      state.address.push(newAddress)
+    },
+    SET_ORDERS(state, orders){
+      state.orders = orders
+    },
+    SET_ORDER(state, order){
+      state.order = order
+    },
+    ADD_ORDER(state, order){
+      state.orders.push(order)
+    },
+    UPDATE_STATUS(state, status){
+      state.status = status
+    },
+    SET_SALES(state, sales){
+      state.sales = sales
+    },
+    SET_SALE(state, sale){
+      state.sale = sale
+    },
+    ADD_SALE(state, sale){
+      state.sales.push(sale)
+    },
+    SET_RECEIVEDDATE(state, receiveddate){
+      state.receiveddate = receiveddate
+    },
+    GET_IMPORTPRODUCT(state, importproduct){
+      state.importproduct = importproduct
+    },
+    GET_FEEDBACK(state, feedbacks){
+      state.feedbacks = feedbacks
+    },
   };
   

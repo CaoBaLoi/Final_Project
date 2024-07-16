@@ -5,10 +5,12 @@ using Househole_shop.Repositories;
 namespace Househole_shop.Services{
     public interface ISaleService
 	{
-		Task<IEnumerable<Sale>> GetAll();
+		Task<IEnumerable<GetSaleDTO>> GetAll();
 		Task Create(SaleDTO saleDTO);
 		Task Update(Sale sale);
 		Task Delete(int id);
+		Task<GetSaleDTO> GetById(int id);
+		Task<IEnumerable<GetSaleDTO>> GetByTime();
 	}
 	public class SaleService(ISaleRepository saleRepository) : ISaleService
 	{
@@ -25,7 +27,7 @@ namespace Househole_shop.Services{
 			await _saleRepository.Delete(id);
 		}
 
-		public async Task<IEnumerable<Sale>> GetAll()
+		public async Task<IEnumerable<GetSaleDTO>> GetAll()
 		{
 			return await _saleRepository.GetAll();
 		}
@@ -34,5 +36,14 @@ namespace Househole_shop.Services{
 		{
 			await _saleRepository.Update(sale);
 		}
-	}
+		public async Task<GetSaleDTO> GetById(int id)
+		{
+			return await _saleRepository.GetById(id);
+		}
+
+        public async Task<IEnumerable<GetSaleDTO>> GetByTime()
+        {
+            return await _saleRepository.GetByTime();
+        }
+    }
 }

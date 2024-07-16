@@ -12,14 +12,13 @@ namespace Househole_shop.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        [HttpGet("userinfo")]
+        [HttpGet("info")]
         public IActionResult GetUserInfo()
         {
             var username = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var role = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
 
-            // Tạo đối tượng UserDataDTO từ các thông tin trong token
             var userData = new UserDataDTO
             {
                 Id = id,
@@ -27,7 +26,6 @@ namespace Househole_shop.Controllers
                 Roles = role
             };
 
-            // Trả về thông tin người dùng
             return Ok(userData);
         }
     }

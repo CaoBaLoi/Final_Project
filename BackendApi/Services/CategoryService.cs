@@ -42,12 +42,6 @@ namespace Househole_shop.Services{
         {
             return await _categoryRepository.GetByName(categoryName);
         }
-
-        // public async Task<Category?> CategoryExits(string categoryName)
-        // {
-        //     return await _categoryRepository.CategoryExits(categoryName);
-        // }
-
         public async Task<int> GetOrCreateCategoryId(string categoryName)
         {
             return await _categoryRepository.GetOrCreateCategoryId(categoryName);

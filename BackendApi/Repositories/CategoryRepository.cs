@@ -23,6 +23,7 @@ namespace Househole_shop.Repositories{
 			using var connection = _context.CreateConnection();
 			var sql = @"
 				SELECT * FROM Categories
+				ORDER BY category_id DESC
 			";
 			return await connection.QueryAsync<Category>(sql);
 		}
@@ -94,21 +95,5 @@ namespace Househole_shop.Repositories{
 			var sql = "SELECT * FROM Categories WHERE category_name = @CategoryName";
 			return await connection.QueryFirstOrDefaultAsync<Category>(sql, new { CategoryName = categoryName });
         }
-
-        // public async Task<Category?> CategoryExits(string categoryName)
-        // {
-        //     using var connection = _context.CreateConnection();
-		// 	var sql = "SELECT category_name FROM Categories WHERE category_name = @categoryName";
-		// 	var categoryname = await connection.ExecuteScalarAsync<string>(sql, new { Categoryname = categoryName });
-
-		// 	if (categoryname != null)
-		// 	{
-		// 		return new Category { category_name = categoryname };
-		// 	}
-		// 	else
-		// 	{
-		// 		return null;
-		// 	}
-        // }
     }
 }

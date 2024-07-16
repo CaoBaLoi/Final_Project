@@ -8,7 +8,17 @@ import App from './App.vue'
 import router from './router/router.js'
 import axios from 'axios';
 axios.defaults.withCredentials = true;
-
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+});
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
@@ -16,6 +26,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(store)
 app.use(ElementPlus)
 app.use(router);
-
 app.mount('#app');
     

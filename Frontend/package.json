@@ -13,8 +13,11 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
+    "chat.js": "^1.0.2",
+    "echarts": "^5.5.1",
     "element-plus": "^2.7.4",
     "vue": "^3.4.21",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.3.2",
     "vuex": "^4.0.2"
   },

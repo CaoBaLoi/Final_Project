@@ -6,7 +6,6 @@ namespace Househole_shop.Repositories{
     public interface ISaleDetailRepository
 	{
 		Task<IEnumerable<SaleDetail>> GetAll();
-		//Task<Saledetail?> GetById(int id);
 		Task Create(SaleDetail saleDetail);
 		Task Update(SaleDetail saleDetail);
 		Task Delete(int id);

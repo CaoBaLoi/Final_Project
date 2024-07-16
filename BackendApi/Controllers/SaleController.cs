@@ -16,6 +16,18 @@ namespace Househole_shop.Controllers{
 			var sales = await _saleService.GetAll();
 			return Ok(sales);
 		}
+		[HttpGet("by-time")]
+		public async Task<IActionResult> GetByTime()
+		{
+			var sales = await _saleService.GetByTime();
+			return Ok(sales);
+		}
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetById(int id)
+		{
+			var sales = await _saleService.GetById(id);
+			return Ok(sales);
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> Create(SaleDTO saleDTO)

@@ -10,23 +10,19 @@ namespace Househole_shop.Controllers{
     public class ProfileController (UserManager<User> userManager, ProfileService profileService) : ControllerBase{
         private readonly UserManager<User> _userManager = userManager;
         private readonly ProfileService _profileService = profileService;
-        private async Task<string?> GetUserIdAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            return user?.Id;
-        }
+        
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = await GetUserIdAsync();
-            if (userId == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
                 return Unauthorized();
             }
 
             try
             {
-                var profile = await _profileService.GetProfileByUserIdAsync(userId);
+                var profile = await _profileService.GetProfileByUserIdAsync(user.Id);
                 return Ok(profile);
             }
             catch (InvalidOperationException)
@@ -37,27 +33,24 @@ namespace Househole_shop.Controllers{
         [HttpPost]
         public async Task<IActionResult> CreateProfile([FromBody] ProfileDTO profileDTO)
         {
-            var userId = await GetUserIdAsync();
-            if (userId == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
                 return Unauthorized();
             }
-
-            profileDTO.user_id = userId;
-            await _profileService.Create(profileDTO);
+            await _profileService.Create(user.Id, profileDTO.fullname, profileDTO.phone, profileDTO.address);
             return Ok(new { message = "Created successfully" });
         }
         [HttpPut]
         public async Task<IActionResult> UpdateProfile([FromBody] ProfileDTO profileDTO)
         {
-            var userId = await GetUserIdAsync();
-            if (userId == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            profileDTO.user_id = userId;
-            await _profileService.Update(profileDTO);
+            await _profileService.Update(user.Id, profileDTO.fullname, profileDTO.phone, profileDTO.address);
             return Ok(new { message = "Updated successfully" });
         }
     }

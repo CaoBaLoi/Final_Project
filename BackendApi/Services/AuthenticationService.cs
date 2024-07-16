@@ -13,34 +13,7 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
     {
         using (var connection = _context.CreateConnection())
         {
-            // // Query to get user information
-            // var userSql = "SELECT * FROM AspNetUsers WHERE UserName = @Username";
-            // var user = await connection.QueryFirstOrDefaultAsync<User>(userSql, new { Username = username });
 
-            // if (user == null)
-            // {
-            //     return null; // User does not exist
-            // }
-
-            // // Assuming the password hash is stored in a different table named UserPasswords
-            // var passwordSql = "SELECT PasswordHash FROM AspNetUsers WHERE Id = @Id";
-            // var passwordHash = await connection.QueryFirstOrDefaultAsync<string>(passwordSql, new { user.Id });
-
-            // if (string.IsNullOrEmpty(passwordHash))
-            // {
-            //     return null; // Password hash not found
-            // }
-
-            // // Verify the password using ASP.NET Core Identity PasswordHasher
-            // var passwordHasher = new PasswordHasher<User>();
-            
-            // var result = passwordHasher.VerifyHashedPassword(user, passwordHash, password);
-            // if (result != PasswordVerificationResult.Success)
-            // {
-            //     return null; // Password does not match
-            // }
-
-            // return user; // Authentication successful
             var user = await _userManager.FindByNameAsync(username);
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
@@ -57,7 +30,7 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
             var user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { Username = username });
             if (user == null)
             {
-                return true; // Người dùng chưa tồn tại
+                return true; 
             }
             return false;
         }
@@ -84,7 +57,6 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
         catch (Exception ex)
         {
             Console.WriteLine("Error executing SQL: " + ex.Message);
-            // Xử lý lỗi khác tùy thuộc vào yêu cầu của bạn
         }
 
         await _mailService.SendEmailAsync(email, "Your OTP Code", $"Your OTP code is {otpCode}");
@@ -123,25 +95,6 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
         }
     }
 
-
-    // public async Task ResetPasswordAsync(string email, string otpCode, string newPassword)
-    // {
-    //     if (await VerifyOtpAsync(email, otpCode))
-    //     {
-    //         var user = await _userManager.FindByEmailAsync(email);
-    //         if( user != null){
-    //             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-    //             await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
-    //         }
-    //         else{
-    //             throw new Exception("User already exists");
-    //         }
-    //     }
-    //     else
-    //     {
-    //         throw new Exception("Invalid OTP code");
-    //     }
-    // }
     public async Task ResetPasswordAsync(string email, string otpCode, string newPassword)
     {
         if (await VerifyOtpAsync(email, otpCode))
@@ -155,12 +108,10 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
                     var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
                     if (result.Succeeded)
                     {
-                        // Password reset successful
                         return;
                     }
                     else
                     {
-                        // Password reset failed, log error details
                         foreach (var error in result.Errors)
                         {
                             Console.WriteLine($"Error: {error.Description}");
@@ -170,7 +121,6 @@ public class AuthenticationService(DataContext context, UserManager<User> userMa
                 }
                 catch (Exception ex)
                 {
-                    // Exception occurred during password reset, log error
                     Console.WriteLine($"An error occurred during password reset: {ex.Message}");
                     throw;
                 }

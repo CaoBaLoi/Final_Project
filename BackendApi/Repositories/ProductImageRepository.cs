@@ -25,15 +25,7 @@ namespace Househole_shop.Repositories{
 			";
 			return await connection.QueryAsync<ProductImage>(sql);
 		}
-		// public async Task<ProductImage?> GetById(int id)
-		// {
-		// 	using var connection = _context.CreateConnection();
-		// 	var sql = @"
-		// 		SELECT * FROM Productimage
-		// 		WHERE image_id = @id
-		// 	";
-		// 	return await connection.QuerySingleOrDefaultAsync<ProductImage>(sql, new { id });
-		// }
+		
 		public async Task Create(ProductImage productImage)
 		{
 			using var connection = _context.CreateConnection();

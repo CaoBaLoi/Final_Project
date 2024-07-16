@@ -1,28 +1,26 @@
 <template>
   <el-container style="height: 100vh;">
-    <!-- Header -->
     <el-header class="header-content" style="text-align: right; font-size: 20px">
-        <div class="toolbar">
-          <div v-if="!loggedIn">
-            <el-button style="height: 85%; font-size: medium;"><router-link to="/login" style="text-decoration: none;">Đăng nhập</router-link></el-button>
-          </div>
-          <div v-else>
-            <span style="font-size: large; margin-right: 30px;">Xin chào {{ username }}</span>
-            <el-button type="danger" class="ml-2" style="height: 85%; font-size: large;" @click="Logout">Đăng xuất</el-button>
-          </div>
+      <div class="toolbar">
+        <div v-if="!loggedIn">
+          <el-button style="height: 85%; font-size: medium;"><router-link to="/login" style="text-decoration: none;">Đăng nhập</router-link></el-button>
         </div>
+        <div v-else>
+          <span style="font-size: large; margin-right: 30px;"><i class="fa-solid fa-user"></i> {{ username }}</span>
+          <el-button type="danger" class="ml-2" style="height: 85%; font-size: large;" @click="Logout">Đăng xuất</el-button>
+        </div>
+      </div>
     </el-header>
 
-    <!-- Main Container -->
     <el-container>
-      <!-- Right Menu -->
-      <el-aside width="200px" style="padding: 0;">
+      <el-aside width="250px" style="padding: 0; height: 700px; background-color: #545c64;">
         <el-menu
           class="el-menu-vertical-demo"
-          background-color="#333"
+          background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
-          :default-active="activeMenuIndex">
+          :default-active="defaultActive"
+          @select="handleMenuSelect">
           <router-link to="/dashboard" style="text-decoration: none;">
             <el-menu-item index="1" class="el-menu">
               <span>Bảng tổng quan</span>
@@ -38,9 +36,9 @@
               <span>Quản lý sản phẩm</span>
             </el-menu-item>
           </router-link>
-          <router-link to="/account" style="text-decoration: none;">
+          <router-link to="/order" style="text-decoration: none;">
             <el-menu-item index="4" class="el-menu">
-              <span>Quản lý người dùng</span>
+              <span>Quản lý đơn hàng</span>
             </el-menu-item>
           </router-link>
           <router-link to="/sale" style="text-decoration: none;">
@@ -52,36 +50,68 @@
       </el-aside>
 
       <el-container>
-      <el-main>
-        <el-scrollbar>
-          <router-view/>
-        </el-scrollbar>
-      </el-main>
-    </el-container>
+        <el-main>
+          <el-scrollbar>
+            <router-view/>
+          </el-scrollbar>
+        </el-main>
+      </el-container>
     </el-container>
   </el-container>
 </template>
 
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const defaultActive = ref('1');
+
+onMounted(() => {
+  const storedActive = localStorage.getItem('defaultActive');
+  if (storedActive !== null) {
+    defaultActive.value = storedActive;
+  } else {
+    defaultActive.value = '1';
+  }
+});
+watch(() => router.path, (newPath, oldPath) => {
+  const storedActive = localStorage.getItem('defaultActive');
+  if (storedActive !== null) {
+    defaultActive.value = storedActive;
+  } else {
+    defaultActive.value = '1';
+  }
+});
+
+const handleMenuSelect = (index) => {
+  defaultActive.value = index;
+  localStorage.setItem('defaultActive', index);
+};
+</script>
+
 <script>
 import { mapState } from 'vuex';
-import { ref } from 'vue'
+
 export default {
   computed: {
-    ...mapState(['loggedIn', 'username']), // Sử dụng mapState để lấy loggedIn và username từ Vuex
+    ...mapState(['loggedIn', 'username']),
+  },
+  setup() {
+    return {
+      defaultActive,
+      handleMenuSelect,
+    };
   },
   methods: {
     async Logout() {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      // Cập nhật trạng thái đăng nhập trong Vuex
-      this.$store.commit('SET_LOGIN', { loggedIn: false, username: '' });
-      // Gọi action logout từ Vuex khi người dùng nhấn vào nút Đăng xuất
+
       await this.$store.dispatch('logout');
     }
   },
-}
-const activeMenuIndex = ref('1');
+  created(){
+    
+  }
+};
 </script>
 
 <style>
@@ -94,7 +124,12 @@ const activeMenuIndex = ref('1');
   background-color: #409EFF;
   justify-content: end;
 }
-.el-menu{
+.el-menu {
   font-size: large;
+  border-color: transparent !important;
+  
+}
+.el-menu-item span{
+  padding-left: 20px !important;
 }
 </style>

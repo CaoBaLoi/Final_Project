@@ -10,6 +10,8 @@ namespace Househole_shop.Services{
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
 		Task Delete(int id);
+		Task UpdateQuantity(int product_id, int quantity);
+		Task<int> GetQuantity(int product_id);
 	}
 	public class ProductService(IProductRepository productRepository) : IProductService
 	{
@@ -34,9 +36,19 @@ namespace Househole_shop.Services{
 			return await _productRepository.GetById(id);
 		}
 
+        public async Task<int> GetQuantity(int product_id)
+        {
+            return await _productRepository.GetQuantity(product_id);
+        }
+
         public async Task Update(ProductDTO productDTO)
 		{
 			await _productRepository.Update(productDTO);
 		}
-	}
+
+        public async Task UpdateQuantity(int product_id, int quantity)
+        {
+            await _productRepository.UpdateQuantity(product_id,quantity);
+        }
+    }
 }

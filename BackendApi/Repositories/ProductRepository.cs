@@ -12,6 +12,8 @@ namespace Househole_shop.Repositories{
 		Task Create(ProductDTO productDTO);
 		Task Update(ProductDTO productDTO);
 		Task Delete(int id);
+		Task UpdateQuantity(int product_id, int quantity);
+		Task<int> GetQuantity(int product_id);
 	}
     public class ProductRepository(DataContext context, TagService tagService, CategoryService categoryService, ProductTagService productTagService, ProductImageService productImageService, CloudinaryService cloudinaryService) : IProductRepository
 	{
@@ -41,7 +43,8 @@ namespace Househole_shop.Repositories{
 				LEFT JOIN 
 					Tags t ON pt.tag_id = t.tag_id
 				GROUP BY 
-					p.product_id, pi.image_url, c.category_name;
+					p.product_id, pi.image_url, c.category_name
+				ORDER BY product_quantity;
 
 			";
 			return await connection.QueryAsync<GetProductDTO>(sql);
@@ -77,9 +80,6 @@ namespace Househole_shop.Repositories{
 			{
 				throw new Exception($"Không tìm thấy sản phẩm với id = {id}");
 			}
-
-			// Xử lý các thao tác khác nếu cần
-
 			return result;
 		}
 		public async Task Create(ProductDTO productDTO)
@@ -119,7 +119,6 @@ namespace Househole_shop.Repositories{
 			foreach (var imageFile in productDTO.image_file)
 			{
 				string? imageUrl;
-				//imageUrl= _googleDriveService.UploadImageToGoogleDrive(imageFile);
 				imageUrl = _cloudinaryService.UploadImage(imageFile);
 				if(imageUrl != null){
 					image_urls.Add(imageUrl);
@@ -135,8 +134,6 @@ namespace Househole_shop.Repositories{
 		public async Task Update(ProductDTO productDTO)
 		{
 			using var connection = _context.CreateConnection();
-
-			// Cập nhật thông tin sản phẩm
 			var categoryName = productDTO.category_name;
 			int categoryId =  await _categoryService.GetOrCreateCategoryId(productDTO.category_name);
 
@@ -159,7 +156,6 @@ namespace Househole_shop.Repositories{
 				productDTO.product_description,
 			});
 			int productId = productDTO.product_id;
-			//Xóa các tag gắn với sản phẩm
 			List<int> producttagIds = await _productTagService.GetByProductId(productId);
 			if (producttagIds != null){
 				foreach (int producttagId in producttagIds){
@@ -179,7 +175,6 @@ namespace Househole_shop.Repositories{
 			{
 				await _productTagService.Create(new ProductTag { product_id= productId, tag_id = tagId});
 			}
-			// Xóa các hình ảnh của sản phẩm trên Google Drive
 			List<string> old_urls = await _productImageService.GetUrlByProductId(productId);
 			if (old_urls != null)
 			{
@@ -187,28 +182,22 @@ namespace Househole_shop.Repositories{
 				{
 					if (old_url != null)
 					{
-						// Sử dụng Replace để thay thế phần cố định "https://drive.google.com/uc?id=" bằng chuỗi trống ""
 						string fileId = old_url.Replace("http://res.cloudinary.com/dkhf0nsxl/image/upload/v1718208527/", "");
-						// Nếu fileId chứa phần mở rộng ".png", cắt bớt phần mở rộng này đi
 						int extensionIndex = fileId.LastIndexOf(".");
 						if (extensionIndex != -1)
 						{
 							fileId = fileId.Substring(0, extensionIndex);
 						}
-
-						// Gọi phương thức DeleteImage từ _cloudinaryService với fileId đã được cắt
 						_cloudinaryService.DeleteImage(fileId);
 					}
 				}
 			}
-			// Xóa các bản ghi ProductImage
 			List<int> productImageIds = await _productImageService.GetIdByProductId(productId);
 			if (productImageIds != null){
 				foreach (int productImageId in productImageIds){
 					await _productImageService.Delete(productImageId);
 				}
 			}
-			// Cập nhật thông tin hình ảnh sản phẩm
 			List<string> image_urls = new List<string>();
 			foreach (var imageFile in productDTO.image_file)
 			{
@@ -219,7 +208,6 @@ namespace Househole_shop.Repositories{
 				}
 			}
 
-			// Thêm các hình ảnh mới của sản phẩm
 			foreach (string image_url in image_urls)
 			{
 				await _productImageService.Create(new ProductImage { product_id = productId, image_url = image_url});
@@ -230,40 +218,33 @@ namespace Househole_shop.Repositories{
 		public async Task Delete(int id)
 		{
 			using var connection = _context.CreateConnection();
-			// Xóa các hình ảnh của sản phẩm trên Google Drive
 			List<string> old_urls = await _productImageService.GetUrlByProductId(id);
 			if (old_urls != null)
 			{
-				// List chứa các tác vụ xóa hình ảnh từ Google Drive
 				var deleteTasks = new List<Task>();
 				foreach (string old_url in old_urls)
 				{
 					if (old_url != null)
 					{
-						// Sử dụng Replace để thay thế phần cố định "https://drive.google.com/uc?id=" bằng chuỗi trống ""
 						string fileId = old_url.Replace("http://res.cloudinary.com/dkhf0nsxl/image/upload/v1718208527/", "");
-						// Nếu fileId chứa phần mở rộng ".png", cắt bớt phần mở rộng này đi
 						int extensionIndex = fileId.LastIndexOf(".");
 						if (extensionIndex != -1)
 						{
 							fileId = fileId.Substring(0, extensionIndex);
 						}
 
-						// Gọi phương thức DeleteImage từ _cloudinaryService với fileId đã được cắt
 						_cloudinaryService.DeleteImage(fileId);
 					}
 				}
-				// Đợi tất cả các tác vụ xóa hình ảnh từ Google Drive hoàn thành
         		await Task.WhenAll(deleteTasks);
 			}
-			// Xóa các bản ghi ProductImage
 			List<int> productImageIds = await _productImageService.GetIdByProductId(id);
 			if (productImageIds != null){
 				foreach (int productImageId in productImageIds){
 					await _productImageService.Delete(productImageId);
 				}
 			}
-			//Xóa các tag gắn với sản phẩm
+
 			List<int> producttagIds = await _productTagService.GetByProductId(id);
 			if (producttagIds != null){
 				foreach (int producttagId in producttagIds){
@@ -276,5 +257,27 @@ namespace Househole_shop.Repositories{
 			";
 			await connection.ExecuteAsync(sql, new { id });
 		}
+
+        public async Task UpdateQuantity(int product_id, int quantity)
+        {
+            using var connection = _context.CreateConnection();
+			var product_quantity = await GetQuantity(product_id);
+			var sql = @"
+				UPDATE Products
+				SET product_quantity = @quantity
+				WHERE product_id = @product_id;
+			";
+			await connection.ExecuteAsync(sql, new{product_id, quantity = quantity+product_quantity});
+        }
+
+        public async Task<int> GetQuantity(int product_id)
+        {
+            using var connection = _context.CreateConnection();
+			var sql = @"
+				SELECT product_quantity FROM Products
+				WHERE product_id = @product_id;
+			";
+			return await connection.QueryFirstOrDefaultAsync<int>(sql, new{product_id});
+        }
     }
 }

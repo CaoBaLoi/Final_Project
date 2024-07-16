@@ -58,7 +58,6 @@ namespace Househole_shop.Services
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    // Các tùy chọn khác của Cloudinary nếu cần
                     Folder = "image",
                 };
 

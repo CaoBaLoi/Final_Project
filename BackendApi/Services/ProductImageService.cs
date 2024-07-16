@@ -5,7 +5,6 @@ namespace Househole_shop.Services{
     public interface IProductImageService
 	{
 		Task<IEnumerable<ProductImage>> GetAll();
-		//Task<ProductImage?> GetById(int id);
 		Task Create(ProductImage productImage);
 		Task Update(ProductImage productImage);
 		Task<List<string>> GetUrlByProductId (int productId);
@@ -41,11 +40,6 @@ namespace Househole_shop.Services{
         {
             return await _productImageRepository.GetUrlByProductId(productId);
         }
-
-        // public async Task<ProductImage?> GetById(int id)
-        // {
-        // 	return await _productImageRepository.GetById(id);
-        // }
 
         public async Task Update(ProductImage productImage)
 		{

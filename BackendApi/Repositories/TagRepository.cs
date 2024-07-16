@@ -95,22 +95,5 @@ namespace Househole_shop.Repositories{
 				}
 			}
 		}
-
-
-        // public async Task<Tag?> TagExits(string tagName)
-        // {
-        //     using var connection = _context.CreateConnection();
-		// 	var sql = "SELECT tag_name FROM Tags WHERE tag_name = @tagName";
-		// 	var tagname = await connection.ExecuteScalarAsync<string>(sql, new { Tagname = tagName });
-
-		// 	if (tagname != null)
-		// 	{
-		// 		return new Tag { tag_name = tagname };
-		// 	}
-		// 	else
-		// 	{
-		// 		return null;
-		// 	}
-        // }
     }
 }

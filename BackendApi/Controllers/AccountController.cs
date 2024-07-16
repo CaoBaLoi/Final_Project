@@ -36,7 +36,6 @@ namespace Househole_shop.Controllers
                     var roles = await _userManager.GetRolesAsync(user);
                     var username = await _userManager.GetUserNameAsync(user);
 
-                    //Create and set authentication cookie
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, user.UserName),
@@ -92,17 +91,12 @@ namespace Househole_shop.Controllers
                     {
                         var roleResult = await _userManager.AddToRoleAsync(user,"User");
                         if(roleResult.Succeeded){
-                            // Đăng nhập người dùng sau khi đăng ký thành công
-                            //await _signInManager.SignInAsync(user, isPersistent: false);
-
-                            // Đăng ký thành công
                             return Ok("Register success");
                         }
                         else{
                             return StatusCode(500,roleResult.Errors);
                         }                      
                     }
-                    // Xử lý lỗi khi đăng ký không thành công
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -112,7 +106,6 @@ namespace Househole_shop.Controllers
                     return BadRequest("Username already exists");
                 }
             }
-            // Trả về BadRequest nếu dữ liệu không hợp lệ
             return BadRequest(ModelState);
         }
         [HttpPost("forgot-password")]
@@ -135,25 +128,21 @@ namespace Househole_shop.Controllers
             if(ModelState.IsValid){
                 try
                 {
-                    // Kiểm tra xem đối tượng resetPassDTO có null không
                     if (email == null)
                     {
                         return BadRequest("Email is null");
                     }
 
-                    // Kiểm tra xem các thuộc tính của đối tượng resetPassDTO có null không
                     if (resetPassDTO.OTP == null || resetPassDTO.Password == null)
                     {
                         return BadRequest("OTP or Password is null");
                     }
 
-                    // Gọi phương thức ResetPasswordAsync từ dịch vụ xác thực
                     await _authenticationService.ResetPasswordAsync(email, resetPassDTO.OTP, resetPassDTO.Password);
                     return Ok("Reset password success");
                 }
                 catch (Exception ex)
                 {
-                    // Nếu có lỗi xảy ra trong quá trình xử lý, trả về BadRequest với thông báo lỗi
                     return BadRequest(new { message = ex.Message });
                 }
             }

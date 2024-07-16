@@ -20,16 +20,13 @@
         <div class="login-link-container">
           <span>Đã có tài khoản? <a><router-link to="/login">Đăng nhập</router-link></a></span>
         </div>
-        <hr class="divider" />
-        <div class="google-login-container">
-          <el-button type="danger" icon="el-icon-google" @click="onGoogleLogin">Đăng nhập với Google</el-button>
-        </div>
       </el-form>
     </el-card>
   </div>
 </template>
 
 <script>
+import { ElMessage } from 'element-plus';
 export default {
   data() {
     return {
@@ -39,15 +36,16 @@ export default {
         Password: '',
       },
       rules: {
-        name: [
-          { required: true, message: 'Vui lòng nhập username', trigger: 'blur' }
+        UserName: [
+          { required: true, message: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' }
         ],
-        email: [
+        Email: [
           { required: true, message: 'Vui lòng nhập email', trigger: 'blur' },
           { type: 'email', message: 'Email không hợp lệ', trigger: ['blur', 'change'] }
         ],
-        password: [
-          { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' }
+        Password: [
+          { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+          { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, message: 'Mật khẩu 8 ký tự bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt', trigger: ['blur', 'change'] }
         ]
       }
     }
@@ -56,22 +54,18 @@ export default {
     async onSubmit() {
       console.log(this.form.UserName, this.form.Email, this.form.Password);
       try {
-          //await this.$refs.form.validate();
           await this.$store.dispatch('register', { 
           UserName: this.form.UserName,
           Email: this.form.Email,
           Password: this.form.Password
           
-        });
+        })
+        ElMessage.success('Đăng ký thành công');
       } catch (error) {
         console.error('Đã xảy ra lỗi khi đăng ký:', error);
-        alert('Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau.');
+        ElMessage.error("Đăng ký không thành công")
       }
     },
-    onGoogleLogin() {
-      // Logic đăng nhập với Google
-      alert('Đăng nhập với Google');
-    }
   }
 }
 </script>

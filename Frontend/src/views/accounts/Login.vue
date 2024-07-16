@@ -11,7 +11,7 @@
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="form.Remember" prop="Remember">Nhớ mật khẩu</el-checkbox>
-          <a href="#" class="forgot-password">Quên mật khẩu?</a>
+          <router-link to="/forgot-pass"><a class="forgot-password">Quên mật khẩu?</a></router-link>
         </el-form-item>
         <el-form-item>
           <div class="button-container">
@@ -21,20 +21,8 @@
         <div class="login-link-container">
           <span>Chưa có tài khoản? <a ><router-link to="/register">Đăng ký</router-link></a></span>
         </div>
-        <hr class="divider" />
-        <div class="google-login-container">
-          <el-button type="danger" icon="el-icon-google" @click="onGoogleLogin">Đăng nhập với Google</el-button>
-        </div>
       </el-form>
     </el-card>
-    <el-dialog v-model="visible"  width="500">
-    <template #header="{ titleId, titleClass }">
-      <div class="my-header">
-        <h4 :id="titleId" :class="titleClass">Đã có lỗi xảy ra</h4>
-      </div>
-    </template>
-    {{ errorMessage }}
-  </el-dialog>
   </div>
 </template>
 
@@ -51,14 +39,12 @@ export default {
       },
       rules: {
         UserName: [
-          { required: true, message: 'Vui lòng nhập tên tài khoản', trigger: 'blur' }
+          { required: true, message: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' }
         ],
         Password: [
           { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' }
         ]
       },
-      visible: false,
-      errorMessage: ''
     }
   },
   methods: {
@@ -68,16 +54,12 @@ export default {
           UserName: this.form.UserName,
           Password: this.form.Password,
           Remember: this.form.Remember
-        });
+        })
+        ElMessage.success('Đăng nhập thành công');
       } catch (error) {
         console.error('Đã xảy ra lỗi khi đăng nhập:', error);
-        this.errorMessage = 'Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.';
-        this.visible = true;
+        ElMessage.error("Tài khoản hoặc mật khẩu không chính xác")
       }
-    },
-    onGoogleLogin() {
-      // Logic đăng nhập với Google
-      alert('Đăng nhập với Google');
     },
     handleDialogClose() {
       this.visible = false;

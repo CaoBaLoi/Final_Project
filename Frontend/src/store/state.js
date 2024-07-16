@@ -6,5 +6,15 @@ export default {
     products: [],
     product: null,
     tags: [],
-    cart:[]
+    cart:[],
+    profile: null,
+    address: [],
+    orders:[],
+    order:null,
+    status:'',
+    sales: [],
+    sale: null,
+    recevieddate: null,
+    importproduct:[],
+    feedbacks:[],
 }

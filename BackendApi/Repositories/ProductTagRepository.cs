@@ -10,7 +10,6 @@ namespace Househole_shop.Repositories{
 		Task Create(ProductTag productTag);
 		Task Update(ProductTag productTag);
 		Task<List<int>> GetByProductId(int productId);
-		//Task<bool> ProductTagExit(int productId, int tagId);
 		Task Delete(int id);
 	}
     public class ProductTagRepository(DataContext context) : IProductTagRepository
@@ -79,16 +78,5 @@ namespace Househole_shop.Repositories{
 			}
 			return listIds;
         }
-
-        // public async Task<bool> ProductTagExit(int productId, int tagId)
-        // {
-        //     using var connection = _context.CreateConnection();
-		// 	var sql = @"
-		// 		SELECT *FROM Producttag
-		// 		WHERE product_id = @productId AND tag_id = @tagId
-		// 	";
-		// 	int count = await connection.QueryFirstOrDefaultAsync<int>(sql, new { productId, tagId });
-		// 	return count > 0;
-        // }
     }
 }

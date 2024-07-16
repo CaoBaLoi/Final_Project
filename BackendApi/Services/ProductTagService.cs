@@ -9,7 +9,6 @@ namespace Househole_shop.Services{
 		Task Create(ProductTag productTag);
 		Task Update(ProductTag productTag);
 		Task<List<int>> GetByProductId(int productId);
-		//Task<bool> ProductTagExit(int productId, int tagId);
 		Task Delete(int id);
 	}
 	public class ProductTagService(IProductTagRepository productTagRepository) : IProductTagService
@@ -41,11 +40,6 @@ namespace Househole_shop.Services{
         {
             return await _productTagRepository.GetByProductId(productId);
         }
-
-        // public async Task<bool> ProductTagExit(int productId, int tagId)
-        // {
-        //     return await _productTagRepository.ProductTagExit(productId, tagId);
-        // }
 
         public async Task Update(ProductTag productTag)
 		{

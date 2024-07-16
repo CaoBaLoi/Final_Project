@@ -73,8 +73,25 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IImportProductRepository, ImportProductRepository>();
+builder.Services.AddScoped<IImportProductService, ImportProductService>();
+builder.Services.AddScoped<IReceivedDateRepository, ReceivedDateRepository>();
+builder.Services.AddScoped<IReceivedDateService, ReceivedDateService>();
+builder.Services.AddScoped<IFeedBackRepository, FeedBackRepository>();
+builder.Services.AddScoped<IFeedBackService, FeedBackService>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<VnPayService>();
 builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<FeedBackService>();
 builder.Services.AddScoped<TagService>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<AddressRepository>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductTagService>();
 builder.Services.AddScoped<ProductImageService>();
@@ -82,8 +99,17 @@ builder.Services.AddScoped<SaleDetailService>();
 builder.Services.AddScoped<ProfileRepository>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<MailService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<CloudinaryService>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -92,6 +118,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod()
                           .AllowCredentials());
 });
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -101,6 +128,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseSession();
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();

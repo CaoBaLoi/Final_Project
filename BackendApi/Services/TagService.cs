@@ -45,11 +45,6 @@ namespace Househole_shop.Services{
             return await _tagRepository.GetOrCreateTagId(tagName);
         }
 
-        // public async Task<Tag?> TagExits(string tagName)
-        // {
-        //     return await _tagRepository.TagExits(tagName);
-        // }
-
         public async Task Update(Tag tag)
 		{
 			await _tagRepository.Update(tag);
